@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Performance — Jan to May</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F7F6F2;
+    color: #1a1a1a;
+    padding: 48px 32px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  header { margin-bottom: 40px; }
+  header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.5px; }
+  header p { font-size: 14px; color: #666; margin-top: 6px; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .stat {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid #E8E6E0;
+  }
+  .stat .num { font-size: 32px; font-weight: 600; line-height: 1; }
+  .stat .lbl { font-size: 12px; color: #888; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat.green .num { color: #1a8c5e; }
+  .stat.red .num { color: #c0392b; }
+  .stat.blue .num { color: #2563eb; }
+
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #E8E6E0;
+  }
+
+  .rep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+
+  .rep-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid #E8E6E0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .rep-card.improved { border-left: 3px solid #1a8c5e; }
+  .rep-card.declined { border-left: 3px solid #c0392b; }
+  .rep-card.stable   { border-left: 3px solid #bbb; }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .improved .avatar { background: #e6f4ee; color: #1a8c5e; }
+  .declined .avatar { background: #fdecea; color: #c0392b; }
+  .stable   .avatar { background: #f0f0ee; color: #888; }
+
+  .rep-info { flex: 1; min-width: 0; }
+  .rep-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rep-detail { font-size: 11px; color: #888; margin-top: 2px; font-family: 'DM Mono', monospace; }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .badge.up   { background: #e6f4ee; color: #1a8c5e; }
+  .badge.down { background: #fdecea; color: #c0392b; }
+  .badge.flat { background: #f0f0ee; color: #888; }
+
+  .chart-section {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #E8E6E0;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+  .chart-section h2 { font-size: 15px; font-weight: 600; margin-bottom: 20px; }
+  .chart-wrap { position: relative; width: 100%; }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: #666;
+  }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .legend-box { width: 12px; height: 12px; border-radius: 3px; }
+
+  footer {
+    font-size: 12px;
+    color: #aaa;
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #E8E6E0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Team Performance Overview</h1>
+  <p>January — May &nbsp;·&nbsp; Ranking percentile movement per account</p>
+</header>
+
+<div class="stats">
+  <div class="stat blue">
+    <div class="num" id="statTotal">—</div>
+    <div class="lbl">Active reps</div>
+  </div>
+  <div class="stat green">
+    <div class="num" id="statImproved">—</div>
+    <div class="lbl">Improved</div>
+  </div>
+  <div class="stat red">
+    <div class="num" id="statDeclined">—</div>
+    <div class="lbl">Declined</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="statStable">—</div>
+    <div class="lbl">Stable</div>
+  </div>
+</div>
+
+<div class="chart-section">
+  <h2>Rank change — Jan to May (positive = improved)</h2>
+  <div class="legend">
+    <span><span class="legend-box" style="background:#1a8c5e"></span>Improved</span>
+    <span><span class="legend-box" style="background:#c0392b"></span>Declined</span>
+    <span><span class="legend-box" style="background:#bbb"></span>Stable / insufficient data</span>
+  </div>
+  <div class="chart-wrap" id="barWrap">
+    <canvas id="barChart" role="img" aria-label="Bar chart showing rank change per rep from January to May"></canvas>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Most improved</div>
+  <div class="rep-grid" id="improvedGrid"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">Declined</div>
+  <div class="rep-grid" id="declinedGrid"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">Stable / limited data</div>
+  <div class="rep-grid" id="stableGrid"></div>
+</div>
+
+<footer>Generated from Teams_all_year_performance.xlsx &nbsp;·&nbsp; Data reflects Jan–May rankings</footer>
+
+<script>
+const data = [
+  {name:'Adriana Jimenez',    scores:[50,30,65,75,40]},
+  {name:'Andrea Vanegas',     scores:[65,75,50,50,null]},
+  {name:'Armando Palacios',   scores:[50,50,45,40,25]},
+  {name:'Benjamin Mancia',    scores:[40,65,40,25,35]},
+  {name:'Carlos Estrada',     scores:[null,null,75,null,null]},
+  {name:'Daniel Salas',       scores:[75,35,65,45,45]},
+  {name:'David Gutierrez',    scores:[null,75,null,75,75]},
+  {name:'Diego Trigueros',    scores:[null,null,null,65,null]},
+  {name:'Douglas Flores',     scores:[5,10,5,5,10]},
+  {name:'Edwin Rodriguez',    scores:[20,20,20,20,20]},
+  {name:'Eli Miron',          scores:[65,50,40,30,40]},
+  {name:'Emmanuel Valladares',scores:[45,45,30,20,30]},
+  {name:'Erick Melgar',       scores:[null,null,null,75,null]},
+  {name:'Franklin Mejia',     scores:[null,null,null,null,null]},
+  {name:'Gerardo Medina',     scores:[40,35,25,20,20]},
+  {name:'Henry Silvestre',    scores:[null,75,65,65,30]},
+  {name:'Irving Ochoa',       scores:[25,40,20,10,10]},
+  {name:'Javier Rivas',       scores:[30,20,30,30,35]},
+  {name:'Jovany Candray',     scores:[20,20,10,10,20]},
+  {name:'Kevin Gonzalez',     scores:[5,5,10,5,5]},
+  {name:'Leonel Alas',        scores:[65,null,null,null,75]},
+  {name:'Lestvia Rubio',      scores:[null,null,null,null,75]},
+  {name:'Manuel Leiva',       scores:[10,10,5,5,5]},
+  {name:'Maria Jose Valencia',scores:[30,45,35,35,25]},
+  {name:'Mauricio Climaco',   scores:[40,25,35,40,50]},
+  {name:'Miguel Aleman',      scores:[null,null,50,25,65]},
+  {name:'Moises Castillo',    scores:[null,null,null,null,65]},
+  {name:'Obed Grande',        scores:[75,null,75,65,65]},
+  {name:'Pedro Hernandez',    scores:[75,65,null,65,75]},
+  {name:'Rodrigo Aguirre',    scores:[null,null,null,null,65]},
+  {name:'Ronald Lizano',      scores:[null,null,75,45,45]},
+  {name:'Sergio Acevedo',     scores:[40,25,25,50,65]},
+  {name:'Sergio Cortez',      scores:[20,5,20,35,50]},
+  {name:'Vanessa Campos',     scores:[75,65,75,null,null]},
+  {name:'Victor Ventura',     scores:[10,20,20,20,20]},
+  {name:'Yesenia Ruano',      scores:[null,null,null,null,null]},
+];
+
+function initials(name) {
+  return name.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+}
+
+function getTrend(scores) {
+  const valid = scores.filter(s=>s!==null);
+  if (valid.length < 2) return null;
+  return valid[0] - valid[valid.length-1];
+}
+
+function getFirstValid(scores) {
+  for (let i=0;i<scores.length;i++) if(scores[i]!==null) return scores[i];
+  return null;
+}
+function getLastValid(scores) {
+  for (let i=scores.length-1;i>=0;i--) if(scores[i]!==null) return scores[i];
+  return null;
+}
+
+function tierLabel(v) {
+  if (v===null) return 'N/A';
+  return 'Top ' + v + '%';
+}
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May'];
+
+const processed = data
+  .filter(r => r.scores.some(s=>s!==null))
+  .map(r => {
+    const trend = getTrend(r.scores);
+    const first = getFirstValid(r.scores);
+    const last = getLastValid(r.scores);
+    let cat = 'stable';
+    if (trend !== null && trend > 5) cat = 'improved';
+    else if (trend !== null && trend < -5) cat = 'declined';
+    return { ...r, trend, first, last, cat };
+  });
+
+const improved = processed.filter(r=>r.cat==='improved').sort((a,b)=>b.trend-a.trend);
+const declined = processed.filter(r=>r.cat==='declined').sort((a,b)=>a.trend-b.trend);
+const stable   = processed.filter(r=>r.cat==='stable');
+
+document.getElementById('statTotal').textContent = processed.length;
+document.getElementById('statImproved').textContent = improved.length;
+document.getElementById('statDeclined').textContent = declined.length;
+document.getElementById('statStable').textContent = stable.length;
+
+function renderGrid(reps, containerId) {
+  const el = document.getElementById(containerId);
+  if (reps.length === 0) { el.innerHTML = '<p style="font-size:13px;color:#aaa">None</p>'; return; }
+  el.innerHTML = reps.map(r => {
+    const sign = r.trend > 0 ? '+' : '';
+    const badgeClass = r.cat === 'improved' ? 'up' : r.cat === 'declined' ? 'down' : 'flat';
+    const badge = r.trend !== null ? `<span class="badge ${badgeClass}">${sign}${r.trend} pts</span>` : `<span class="badge flat">—</span>`;
+    return `
+      <div class="rep-card ${r.cat}">
+        <div class="avatar">${initials(r.name)}</div>
+        <div class="rep-info">
+          <div class="rep-name">${r.name}</div>
+          <div class="rep-detail">${tierLabel(r.first)} → ${tierLabel(r.last)}</div>
+        </div>
+        ${badge}
+      </div>`;
+  }).join('');
+}
+
+renderGrid(improved, 'improvedGrid');
+renderGrid(declined, 'declinedGrid');
+renderGrid(stable,   'stableGrid');
+
+const chartData = [...improved, ...declined, ...stable].sort((a,b) => (b.trend||0)-(a.trend||0));
+const barColors = chartData.map(r =>
+  r.cat==='improved' ? '#1a8c5e' : r.cat==='declined' ? '#c0392b' : '#bbb'
+);
+const barWrap = document.getElementById('barWrap');
+barWrap.style.height = (chartData.length * 28 + 60) + 'px';
+
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: chartData.map(r => r.name.split(' ').map((p,i)=>i===0?p:p[0]+'.').join(' ')),
+    datasets: [{
+      label: 'Rank change (pts)',
+      data: chartData.map(r => r.trend || 0),
+      backgroundColor: barColors,
+      borderRadius: 4,
+      barThickness: 18,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: ctx => chartData[ctx[0].dataIndex].name,
+          label: ctx => {
+            const r = chartData[ctx[0].dataIndex];
+            const v = ctx.parsed.x;
+            return ` ${v > 0 ? '+' : ''}${v} pts  (${tierLabel(r.first)} → ${tierLabel(r.last)})`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { font: { size: 11, family: 'DM Mono' }, color: '#888' },
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        title: { display: true, text: '← Declined   |   Improved →', color: '#aaa', font: { size: 11 } }
+      },
+      y: {
+        ticks: { font: { size: 11 }, color: '#444' },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
