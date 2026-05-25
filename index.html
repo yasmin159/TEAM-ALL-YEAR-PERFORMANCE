@@ -144,7 +144,7 @@
 
 <header>
   <h1>Team Performance Overview</h1>
-  <p>January — May &nbsp;·&nbsp; Ranking percentile movement per account</p>
+  <p>January — May &nbsp;·&nbsp; Ranking percentile movement per account &nbsp;·&nbsp; "Below Top 75%" = 85pts (worst tier)</p>
 </header>
 
 <div class="stats">
@@ -167,14 +167,14 @@
 </div>
 
 <div class="chart-section">
-  <h2>Rank change — Jan to May (positive = improved)</h2>
+  <h2>Rank change — first to last month with data (positive = improved)</h2>
   <div class="legend">
     <span><span class="legend-box" style="background:#1a8c5e"></span>Improved</span>
     <span><span class="legend-box" style="background:#c0392b"></span>Declined</span>
-    <span><span class="legend-box" style="background:#bbb"></span>Stable / insufficient data</span>
+    <span><span class="legend-box" style="background:#bbb"></span>Stable / only 1 month</span>
   </div>
   <div class="chart-wrap" id="barWrap">
-    <canvas id="barChart" role="img" aria-label="Bar chart showing rank change per rep from January to May"></canvas>
+    <canvas id="barChart" role="img" aria-label="Bar chart showing rank change per rep from first to last month with data"></canvas>
   </div>
 </div>
 
@@ -193,46 +193,47 @@
   <div class="rep-grid" id="stableGrid"></div>
 </div>
 
-<footer>Generated from Teams_all_year_performance.xlsx &nbsp;·&nbsp; Data reflects Jan–May rankings</footer>
+<footer>Generated from Teams_all_year_performance.xlsx &nbsp;·&nbsp; Data reflects Jan–May rankings &nbsp;·&nbsp; Typos fixed: Andy→Andrea Vanegas, Ronal→Ronald Lizano</footer>
 
 <script>
 const data = [
-  {name:'Adriana Jimenez',    scores:[50,30,65,75,40]},
-  {name:'Andrea Vanegas',     scores:[65,75,50,50,null]},
-  {name:'Armando Palacios',   scores:[50,50,45,40,25]},
-  {name:'Benjamin Mancia',    scores:[40,65,40,25,35]},
-  {name:'Carlos Estrada',     scores:[null,null,75,null,null]},
-  {name:'Daniel Salas',       scores:[75,35,65,45,45]},
-  {name:'David Gutierrez',    scores:[null,75,null,75,75]},
-  {name:'Diego Trigueros',    scores:[null,null,null,65,null]},
-  {name:'Douglas Flores',     scores:[5,10,5,5,10]},
-  {name:'Edwin Rodriguez',    scores:[20,20,20,20,20]},
-  {name:'Eli Miron',          scores:[65,50,40,30,40]},
-  {name:'Emmanuel Valladares',scores:[45,45,30,20,30]},
-  {name:'Erick Melgar',       scores:[null,null,null,75,null]},
-  {name:'Franklin Mejia',     scores:[null,null,null,null,null]},
-  {name:'Gerardo Medina',     scores:[40,35,25,20,20]},
-  {name:'Henry Silvestre',    scores:[null,75,65,65,30]},
-  {name:'Irving Ochoa',       scores:[25,40,20,10,10]},
-  {name:'Javier Rivas',       scores:[30,20,30,30,35]},
-  {name:'Jovany Candray',     scores:[20,20,10,10,20]},
-  {name:'Kevin Gonzalez',     scores:[5,5,10,5,5]},
-  {name:'Leonel Alas',        scores:[65,null,null,null,75]},
-  {name:'Lestvia Rubio',      scores:[null,null,null,null,75]},
-  {name:'Manuel Leiva',       scores:[10,10,5,5,5]},
-  {name:'Maria Jose Valencia',scores:[30,45,35,35,25]},
-  {name:'Mauricio Climaco',   scores:[40,25,35,40,50]},
-  {name:'Miguel Aleman',      scores:[null,null,50,25,65]},
-  {name:'Moises Castillo',    scores:[null,null,null,null,65]},
-  {name:'Obed Grande',        scores:[75,null,75,65,65]},
-  {name:'Pedro Hernandez',    scores:[75,65,null,65,75]},
-  {name:'Rodrigo Aguirre',    scores:[null,null,null,null,65]},
-  {name:'Ronald Lizano',      scores:[null,null,75,45,45]},
-  {name:'Sergio Acevedo',     scores:[40,25,25,50,65]},
-  {name:'Sergio Cortez',      scores:[20,5,20,35,50]},
-  {name:'Vanessa Campos',     scores:[75,65,75,null,null]},
-  {name:'Victor Ventura',     scores:[10,20,20,20,20]},
-  {name:'Yesenia Ruano',      scores:[null,null,null,null,null]},
+  {name:'Adriana Jimenez',     scores:[50,30,65,75,40]},
+  {name:'Andrea Vanegas',      scores:[65,75,50,50,85]},
+  {name:'Armando Palacios',    scores:[50,50,45,40,25]},
+  {name:'Benjamin Mancia',     scores:[40,65,40,25,35]},
+  {name:'Carlos Estrada',      scores:[85,85,75,85,85]},
+  {name:'Daniel Salas',        scores:[75,35,65,45,45]},
+  {name:'David Gutierrez',     scores:[85,75,85,75,75]},
+  {name:'Diego Trigueros',     scores:[85,85,85,65,85]},
+  {name:'Douglas Flores',      scores:[5,10,5,5,10]},
+  {name:'Edwin Rodriguez',     scores:[20,20,20,20,20]},
+  {name:'Eli Miron',           scores:[65,50,40,30,40]},
+  {name:'Emmanuel Valladares', scores:[45,45,30,20,30]},
+  {name:'Erick Melgar',        scores:[null,null,85,75,85]},
+  {name:'Franklin Mejia',      scores:[85,85,85,85,85]},
+  {name:'Gerardo Medina',      scores:[40,35,25,20,20]},
+  {name:'Henry Silvestre',     scores:[85,75,65,65,30]},
+  {name:'Irving Ochoa',        scores:[25,40,20,10,10]},
+  {name:'Javier Rivas',        scores:[30,20,30,30,35]},
+  {name:'Jovany Candray',      scores:[20,20,10,10,20]},
+  {name:'Julio Pinto',         scores:[null,null,85,65,85]},
+  {name:'Kevin Gonzalez',      scores:[5,5,10,5,5]},
+  {name:'Leonel Alas',         scores:[65,85,85,85,75]},
+  {name:'Lestvia Rubio',       scores:[85,85,85,85,75]},
+  {name:'Manuel Leiva',        scores:[10,10,5,5,5]},
+  {name:'Maria Jose Valencia', scores:[30,45,35,35,25]},
+  {name:'Mauricio Climaco',    scores:[40,25,35,40,50]},
+  {name:'Miguel Aleman',       scores:[null,85,50,25,65]},
+  {name:'Moises Castillo',     scores:[null,null,null,85,65]},
+  {name:'Obed Grande',         scores:[75,85,75,65,65]},
+  {name:'Pedro Hernandez',     scores:[75,65,85,65,75]},
+  {name:'Rodrigo Aguirre',     scores:[null,null,85,85,65]},
+  {name:'Ronald Lizano',       scores:[null,null,75,45,45]},
+  {name:'Sergio Acevedo',      scores:[40,25,25,50,65]},
+  {name:'Sergio Cortez',       scores:[20,5,20,35,50]},
+  {name:'Vanessa Campos',      scores:[75,65,75,85,85]},
+  {name:'Victor Ventura',      scores:[10,20,20,20,20]},
+  {name:'Yesenia Ruano',       scores:[null,null,null,85,85]},
 ];
 
 function initials(name) {
@@ -256,19 +257,18 @@ function getLastValid(scores) {
 
 function tierLabel(v) {
   if (v===null) return 'N/A';
+  if (v===85) return 'Below Top 75%';
   return 'Top ' + v + '%';
 }
-
-const MONTHS = ['Jan','Feb','Mar','Apr','May'];
 
 const processed = data
   .filter(r => r.scores.some(s=>s!==null))
   .map(r => {
     const trend = getTrend(r.scores);
     const first = getFirstValid(r.scores);
-    const last = getLastValid(r.scores);
+    const last  = getLastValid(r.scores);
     let cat = 'stable';
-    if (trend !== null && trend > 5) cat = 'improved';
+    if (trend !== null && trend > 5)  cat = 'improved';
     else if (trend !== null && trend < -5) cat = 'declined';
     return { ...r, trend, first, last, cat };
   });
@@ -277,18 +277,20 @@ const improved = processed.filter(r=>r.cat==='improved').sort((a,b)=>b.trend-a.t
 const declined = processed.filter(r=>r.cat==='declined').sort((a,b)=>a.trend-b.trend);
 const stable   = processed.filter(r=>r.cat==='stable');
 
-document.getElementById('statTotal').textContent = processed.length;
+document.getElementById('statTotal').textContent    = processed.length;
 document.getElementById('statImproved').textContent = improved.length;
 document.getElementById('statDeclined').textContent = declined.length;
-document.getElementById('statStable').textContent = stable.length;
+document.getElementById('statStable').textContent   = stable.length;
 
 function renderGrid(reps, containerId) {
   const el = document.getElementById(containerId);
   if (reps.length === 0) { el.innerHTML = '<p style="font-size:13px;color:#aaa">None</p>'; return; }
   el.innerHTML = reps.map(r => {
     const sign = r.trend > 0 ? '+' : '';
-    const badgeClass = r.cat === 'improved' ? 'up' : r.cat === 'declined' ? 'down' : 'flat';
-    const badge = r.trend !== null ? `<span class="badge ${badgeClass}">${sign}${r.trend} pts</span>` : `<span class="badge flat">—</span>`;
+    const badgeClass = r.cat==='improved' ? 'up' : r.cat==='declined' ? 'down' : 'flat';
+    const badge = r.trend !== null
+      ? `<span class="badge ${badgeClass}">${sign}${r.trend} pts</span>`
+      : `<span class="badge flat">—</span>`;
     return `
       <div class="rep-card ${r.cat}">
         <div class="avatar">${initials(r.name)}</div>
@@ -305,7 +307,7 @@ renderGrid(improved, 'improvedGrid');
 renderGrid(declined, 'declinedGrid');
 renderGrid(stable,   'stableGrid');
 
-const chartData = [...improved, ...declined, ...stable].sort((a,b) => (b.trend||0)-(a.trend||0));
+const chartData = [...improved, ...declined, ...stable].sort((a,b)=>(b.trend||0)-(a.trend||0));
 const barColors = chartData.map(r =>
   r.cat==='improved' ? '#1a8c5e' : r.cat==='declined' ? '#c0392b' : '#bbb'
 );
